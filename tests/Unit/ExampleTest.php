@@ -1,16 +1,15 @@
 <?php
+/*
+Este teste verifica se `true` é igual a `true`.
 
-namespace Tests\Unit;
+Aqui está uma explicação passo a passo do que o teste está fazendo:
 
-use PHPUnit\Framework\TestCase;
+1. `expect(true)`: Esta linha cria uma nova instância de Expectation para o valor `true`.
 
-class ExampleTest extends TestCase
-{
-    /**
-     * A basic test example.
-     */
-    public function test_that_true_is_true(): void
-    {
-        $this->assertTrue(true);
-    }
-}
+2. `->toBeTrue()`: Esta linha verifica se o valor esperado é `true`.
+
+Como `true` sempre será igual a `true`, este teste sempre passará.
+*/
+test('Teste que true eh true', function () {
+    expect(true)->toBeTrue();
+});
