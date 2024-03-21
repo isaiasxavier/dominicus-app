@@ -31,7 +31,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                //
+
             ])
             ->filters([
                 //
