@@ -23,7 +23,20 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->label('Name')
+                    ->required()
+                    ->autocomplete('name'),
+
+                Forms\Components\TextInput::make('email')
+                    ->label('Email')
+                    ->required()
+                    ->autocomplete('email'),
+
+                /*Forms\Components\PasswordInput::make('password')
+                    ->label('Password')
+                    ->required()
+                    ->autocomplete('new-password'),*/
             ]);
     }
 
@@ -31,6 +44,15 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+
+                /*Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->primary(),*/
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Name'),
+                Tables\Columns\TextColumn::make('email')
+                    ->label('Email'),
+
 
             ])
             ->filters([
