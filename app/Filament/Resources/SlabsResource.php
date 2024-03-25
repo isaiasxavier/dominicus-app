@@ -1,0 +1,190 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\SlabsResource\Pages;
+use App\Models\Slabs;
+use App\Models\User;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+class SlabsResource extends Resource
+{
+    protected static ?string $model = Slabs::class;
+
+    protected static ?string $slug = 'slabs';
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+
+                /*Cria um text field onde eu seleciono os id da tabelas users */
+                Select::make('user_id')
+                    ->relationship('user', 'id')
+                    ->required(),
+
+                Placeholder::make('created_at')
+                    ->label('Created Date')
+                    ->content(fn(?Slabs $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+
+                Placeholder::make('updated_at')
+                    ->label('Last Modified Date')
+                    ->content(fn(?Slabs $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+
+                TextInput::make('name')
+                    ->required(),
+
+                TextInput::make('brand')
+                    ->required(),
+
+                TextInput::make('description')
+                    ->required(),
+
+                TextInput::make('quantity')
+                    ->required()
+                    ->integer(),
+
+                TextInput::make('supplier')
+                    ->required(),
+
+                TextInput::make('order_number'),
+
+                TextInput::make('price')
+                    ->numeric(),
+
+                TextInput::make('polishment')
+                    ->required(),
+
+                TextInput::make('thickness')
+                    ->required()
+                    ->integer(),
+
+                TextInput::make('width')
+                    ->required()
+                    ->numeric(),
+
+                TextInput::make('length')
+                    ->required()
+                    ->numeric(),
+
+                TextInput::make('square_meters')
+                    ->required()
+                    ->numeric(),
+
+                TextInput::make('physical_position')
+                    ->required(),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('brand'),
+
+//                TextColumn::make('description'),
+
+                TextColumn::make('quantity'),
+
+                TextColumn::make('supplier'),
+
+                TextColumn::make('order_number'),
+
+//                TextColumn::make('price'),
+
+                TextColumn::make('polishment'),
+
+                TextColumn::make('thickness'),
+
+                /*TextColumn::make('width'),
+
+                TextColumn::make('length'),*/
+
+                TextColumn::make('square_meters')
+                    ->label('M²'),
+
+                TextColumn::make('physical_position')
+                    ->label('Location'),
+            ])
+            ->filters([
+                TrashedFilter::make(),
+            ])
+            ->actions([
+                EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
+            ])
+            ->bulkActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListSlabs::route('/'),
+            'create' => Pages\CreateSlabs::route('/create'),
+            'edit' => Pages\EditSlabs::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['user']);
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'user.name'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        $details = [];
+
+        if ($record->user) {
+            $details['User'] = $record->user->name;
+        }
+
+        return $details;
+    }
+}
