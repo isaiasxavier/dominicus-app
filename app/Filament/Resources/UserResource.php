@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Filament\FontProviders\Contracts\FontProvider;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -33,6 +34,13 @@ class UserResource extends Resource
                     ->required()
                     ->autocomplete('email'),
 
+                /*Forms\Components\TextInput::make('roles')
+                    ->label('roles')
+                    ->required()
+//                    ->disabled()
+                    ->autocomplete('name'),*/
+
+
                 /*Forms\Components\PasswordInput::make('password')
                     ->label('Password')
                     ->required()
@@ -49,9 +57,20 @@ class UserResource extends Resource
                     ->label('ID')
                     ->primary(),*/
                 Tables\Columns\TextColumn::make('name')
+                    ->icon('heroicon-m-user')
+                    ->iconColor('primary')
                     ->label('Name'),
+
                 Tables\Columns\TextColumn::make('email')
+                    ->icon('heroicon-m-envelope')
+                    ->iconColor('primary')
+                    ->fontFamily('mono')
                     ->label('Email'),
+
+                Tables\Columns\TextColumn::make('model_has_roles')
+
+                    ->label('Roles'),
+
 
 
             ])
@@ -71,7 +90,12 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            /*'roles' => function ($query) {
+                $query->select('roles.name')
+                    ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
+                    ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+                    ->where('model_has_roles.model_type', User::class);
+            },*/
         ];
     }
 
