@@ -24,6 +24,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class SlabsResource extends Resource
 {
@@ -41,17 +42,24 @@ class SlabsResource extends Resource
             ->schema([
 
                 /*Cria um text field onde eu seleciono os id da tabelas users */
-                Select::make('user_id')
-                    ->relationship('user', 'id')
-                    ->required(),
+                /*Select::make('user_id')
+                    ->relationship('user', 'id')    //relacionamento com a tabela user e o campo id
+                    ->required(),*/
+
+                Placeholder::make('user_id')
+                    ->label('User ID')
+                    ->content(Auth::user()->id)
+                    ->hidden(),
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Slabs $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Slabs $record): string => $record?->created_at?->diffForHumans() ?? '-')
+                    ->hidden(),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Slabs $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Slabs $record): string => $record?->updated_at?->diffForHumans() ?? '-')
+                    ->hidden(),
 
                 TextInput::make('name')
                     ->required(),

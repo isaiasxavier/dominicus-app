@@ -30,6 +30,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'model_id',
+        'user_id',
 
     ];
 
@@ -55,7 +56,7 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
-    public function  users_roles(): BelongsToMany
+    public function  user_role(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id');
 

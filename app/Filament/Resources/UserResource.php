@@ -7,18 +7,21 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\FontProviders\Contracts\FontProvider;
 use Filament\Forms;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
 
     public static function form(Form $form): Form
     {
@@ -34,17 +37,19 @@ class UserResource extends Resource
                     ->required()
                     ->autocomplete('email'),
 
-                /*Forms\Components\TextInput::make('roles')
-                    ->label('roles')
-                    ->required()
-//                    ->disabled()
-                    ->autocomplete('name'),*/
+                    /*Forms\Components\TextInput::make('roles')
+                        ->label('roles')
+                        ->required()
+    //                    ->disabled()
+                        ->autocomplete('roles'),*/
 
 
-                /*Forms\Components\PasswordInput::make('password')
+                /*Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->required()
                     ->autocomplete('new-password'),*/
+
+
             ]);
     }
 
@@ -67,10 +72,15 @@ class UserResource extends Resource
                     ->fontFamily('mono')
                     ->label('Email'),
 
-                Tables\Columns\TextColumn::make('model_has_roles')
-
-                    ->label('Roles'),
-
+                /**
+                 * Cria uma coluna na tabela para exibir os papéis (roles) do usuário.
+                 * @method label 'Roles' Define o rótulo da coluna.
+                 * @method make  'roles' Cria uma nova coluna de texto com o nome 'roles'.
+                 * @method name  'roles.name' Define o nome da coluna que será usada para buscar os dados.
+                 * Neste caso, 'roles.name' indica que estamos buscando o nome do papel (role) na relação 'roles'.
+                 */
+                Tables\Columns\TextColumn::make('roles')->name('roles.name')
+                    ->label('Access Level')
 
 
             ])
@@ -89,13 +99,11 @@ class UserResource extends Resource
 
     public static function getRelations(): array
     {
+
         return [
-            /*'roles' => function ($query) {
-                $query->select('roles.name')
-                    ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
-                    ->join('users', 'model_has_roles.model_id', '=', 'users.id')
-                    ->where('model_has_roles.model_type', User::class);
-            },*/
+
+
+
         ];
     }
 
