@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SlabsResource\Pages;
 use App\Models\Slabs;
 use App\Models\User;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -42,14 +43,9 @@ class SlabsResource extends Resource
             ->schema([
 
                 /*Cria um text field onde eu seleciono os id da tabelas users */
-                /*Select::make('user_id')
-                    ->relationship('user', 'id')    //relacionamento com a tabela user e o campo id
-                    ->required(),*/
+                Hidden::make('user_id')
+                    ->default(Auth::user()->id),
 
-                Placeholder::make('user_id')
-                    ->label('User ID')
-                    ->content(Auth::user()->id)
-                    ->hidden(),
 
                 Placeholder::make('created_at')
                     ->label('Created Date')

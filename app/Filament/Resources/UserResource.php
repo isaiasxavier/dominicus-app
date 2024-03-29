@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -37,17 +38,17 @@ class UserResource extends Resource
                     ->required()
                     ->autocomplete('email'),
 
-                    /*Forms\Components\TextInput::make('roles')
-                        ->label('roles')
-                        ->required()
-    //                    ->disabled()
-                        ->autocomplete('roles'),*/
+                Forms\Components\Select::make('role_id')
+                    ->label('Roles')
+                    ->required()
+                    ->options(
+                        Role::query()->pluck('name', 'id')->toArray()
+                    ),
 
-
-                /*Forms\Components\TextInput::make('password')
+                Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->required()
-                    ->autocomplete('new-password'),*/
+                    ->autocomplete('new-password'),
 
 
             ]);
