@@ -2,12 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SlabsResource\Pages;
+use App\Filament\Resources\SlabResource\Pages;
 use App\Models\Slabs;
-use App\Models\User;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
-class SlabsResource extends Resource
+class SlabResource extends Resource
 {
     protected static ?string $model = Slabs::class;
 
@@ -105,6 +103,9 @@ class SlabsResource extends Resource
             ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -113,7 +114,14 @@ class SlabsResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('brand'),
+//                TextColumn::make('brand'),
+
+                    TextColumn::make('price')
+                            ->sortable()
+                            ->money('eur')
+                            ->getStateUsing(function (Slabs $record): float {
+                                return $record->price / 100;
+                            }),
 
 //                TextColumn::make('description'),
 
@@ -163,9 +171,9 @@ class SlabsResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSlabs::route('/'),
-            'create' => Pages\CreateSlabs::route('/create'),
-            'edit' => Pages\EditSlabs::route('/{record}/edit'),
+            'index' => Pages\ListSlab::route('/'),
+            'create' => Pages\CreateSlab::route('/create'),
+            'edit' => Pages\EditSlab::route('/{record}/edit'),
         ];
     }
 

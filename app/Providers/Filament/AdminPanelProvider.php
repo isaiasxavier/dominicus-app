@@ -26,8 +26,8 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('dashboard') // Original 'admin'
+            ->path('dashboard') // Original 'admin'
             ->login()
             ->profile(isSimple: false)
 //            ->registration()
