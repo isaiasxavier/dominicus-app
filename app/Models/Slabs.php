@@ -27,6 +27,7 @@ class Slabs extends Model
         'physical_position',
         'image',
         'user_id',
+        'type_stone',
     ];
 
     public function user(): BelongsTo

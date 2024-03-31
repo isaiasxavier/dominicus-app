@@ -16,7 +16,7 @@ class CreateSlabsTable extends Migration
             $table->integer('quantity');
             $table->string('supplier');
             $table->string('order_number')->nullable();
-            $table->decimal('price')->nullable();
+            $table->integer('price')->nullable();
             $table->string('polishment');
             $table->integer('thickness');
             $table->decimal('width');

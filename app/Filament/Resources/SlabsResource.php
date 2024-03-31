@@ -99,6 +99,9 @@ class SlabsResource extends Resource
 
                 TextInput::make('physical_position')
                     ->required(),
+
+                TextInput::make('type_stone')
+                    ->required(),
             ]);
     }
 
@@ -132,6 +135,9 @@ class SlabsResource extends Resource
 
                 TextColumn::make('square_meters')
                     ->label('M²'),
+
+                TextColumn::make('type_stone')
+                    ->label('Type'),
 
                 TextColumn::make('physical_position')
                     ->label('Location'),

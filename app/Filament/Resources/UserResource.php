@@ -11,6 +11,8 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -37,6 +39,7 @@ class UserResource extends Resource
                     ->label('Email')
                     ->required()
                     ->autocomplete('email'),
+
 
                 Forms\Components\Select::make('role_id')
                     ->label('Roles')
@@ -65,12 +68,16 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->icon('heroicon-m-user')
                     ->iconColor('primary')
+                    ->sortable()
+                    ->searchable()
                     ->label('Name'),
 
                 Tables\Columns\TextColumn::make('email')
                     ->icon('heroicon-m-envelope')
                     ->iconColor('primary')
                     ->fontFamily('mono')
+                    ->sortable()
+                    ->searchable()
                     ->label('Email'),
 
                 /**
@@ -80,7 +87,10 @@ class UserResource extends Resource
                  * @method name  'roles.name' Define o nome da coluna que será usada para buscar os dados.
                  * Neste caso, 'roles.name' indica que estamos buscando o nome do papel (role) na relação 'roles'.
                  */
-                Tables\Columns\TextColumn::make('roles')->name('roles.name')
+                Tables\Columns\TextColumn::make('roles')
+                    ->name('roles.name')
+                    ->sortable()
+                    ->searchable()
                     ->label('Access Level')
 
 
@@ -89,7 +99,8 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
