@@ -23,7 +23,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-m-user';
 
 
     public static function form(Form $form): Form
@@ -60,7 +60,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
+            ->columns(components: [
 
                 /*Tables\Columns\TextColumn::make('id')
                     ->label('ID')
@@ -91,6 +91,7 @@ class UserResource extends Resource
                     ->name('roles.name')
                     ->sortable()
                     ->searchable()
+                    ->badge(/*Role::query()->where('name', true)->count()*/)
                     ->label('Access Level')
 
 

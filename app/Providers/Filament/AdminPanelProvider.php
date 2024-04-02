@@ -21,6 +21,9 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    /**
+     * @throws \Exception
+     */
 
     public function panel(Panel $panel): Panel
     {
@@ -32,7 +35,10 @@ class AdminPanelProvider extends PanelProvider
             ->profile(isSimple: false)
 //            ->registration()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Sky,
+                'secondary' => Color::Blue,
+                'tertiary' => Color::Amber,
+
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

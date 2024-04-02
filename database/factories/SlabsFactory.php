@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Slabs;
+use App\Models\Slab;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class SlabsFactory extends Factory
 {
-    protected $model = Slabs::class;
+    protected $model = Slab::class;
 
     public function definition(): array
     {

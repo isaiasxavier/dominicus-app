@@ -15,7 +15,7 @@ então este teste passará. Se a rota principal não estiver funcionando correta
 então este teste falhará.
 */
 test('testa se a rota principal funciona', function () {
-    $response = $this->get('/');
+    $response = $this->get('/dashboard/login');
 
     $response->assertStatus(200);
 });

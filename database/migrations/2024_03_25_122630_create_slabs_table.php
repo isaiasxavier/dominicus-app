@@ -17,11 +17,12 @@ class CreateSlabsTable extends Migration
             $table->string('supplier');
             $table->string('order_number')->nullable();
             $table->integer('price')->nullable();
-            $table->string('polishment');
+//            $table->string('polishment');                                      //Foi alterado para finish
+//            $table->enum('finish', ['geschuurd', 'gezoet', 'gepolijst']);
             $table->integer('thickness');
-            $table->decimal('width');
-            $table->decimal('length');
-            $table->decimal('square_meters');
+            $table->integer('width');
+            $table->integer('length');
+            $table->integer('square_meters');
             $table->string('physical_position');
             $table->foreignId('user_id');
             $table->string('image')->nullable();

@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.3",
         "bezhansalleh/filament-shield": "^3.2",
+        "doctrine/dbal": "^3.8",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",

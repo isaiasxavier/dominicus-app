@@ -16,7 +16,7 @@ class AddTypeStoneToSlabsTable extends Migration
     /*public function down(): void
     {
         Schema::table('slabs', function (Blueprint $table) {
-            //
+            $table->dropColumn('type_stone');
         });
     }*/
 }

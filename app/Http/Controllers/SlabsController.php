@@ -3,33 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SlabsRequest;
-use App\Models\Slabs;
+use App\Models\Slab;
 
 class SlabsController extends Controller
 {
     public function index()
     {
-        return Slabs::all();
+        return Slab::all();
     }
 
     public function store(SlabsRequest $request)
     {
-        return Slabs::create($request->validated());
+        return Slab::create($request->validated());
     }
 
-    public function show(Slabs $slabs)
+    public function show(Slab $slabs)
     {
         return $slabs;
     }
 
-    public function update(SlabsRequest $request, Slabs $slabs)
+    public function update(SlabsRequest $request, Slab $slabs)
     {
         $slabs->update($request->validated());
 
         return $slabs;
     }
 
-    public function destroy(Slabs $slabs)
+    public function destroy(Slab $slabs)
     {
         $slabs->delete();
 
