@@ -36,7 +36,6 @@ class EditSlab extends EditRecord
     {
         $data['price'] *= 100;
 
-        // Calcula a área em milímetros quadrados e multiplica pela quantidade
         $data['square_meters'] = ($data['width'] * $data['length']) * $data['quantity'];
 
         return $data;

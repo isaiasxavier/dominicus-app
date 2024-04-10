@@ -3,21 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
-use Filament\FontProviders\Contracts\FontProvider;
 use Filament\Forms;
-use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -40,28 +34,33 @@ class UserResource extends Resource
                     ->required()
                     ->autocomplete('email'),
 
-
-                Forms\Components\Select::make('role_id')
+                /*Forms\Components\Select::make('role_id')
                     ->label('Roles')
                     ->required()
                     ->options(
                         Role::query()->pluck('name', 'id')->toArray()
-                    ),
+                    ),*/
+
+                Radio::make('role_id')
+                    ->options([
+                        'super_admin' => 'Super Admin',
+                        'admin'    => 'Admin',
+                        'panel_user' => 'User',
+                    ])
+                    ->label('Access Level'),
 
                 Forms\Components\TextInput::make('password')
-                    ->label('Password')
-                    ->required()
-                    ->autocomplete('new-password'),
+                    ->password()
+                    ->revealable()
 
 
-            ]);
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns(components: [
-
                 /*Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->primary(),*/
@@ -87,13 +86,12 @@ class UserResource extends Resource
                  * @method name  'roles.name' Define o nome da coluna que será usada para buscar os dados.
                  * Neste caso, 'roles.name' indica que estamos buscando o nome do papel (role) na relação 'roles'.
                  */
-                Tables\Columns\TextColumn::make('roles')
+                Tables\Columns\TextColumn::make('roles')->label('Access Level')
                     ->name('roles.name')
+                    ->color('access_level')
                     ->sortable()
                     ->searchable()
-                    ->badge(/*Role::query()->where('name', true)->count()*/)
-                    ->label('Access Level')
-
+                    ->badge(),
 
             ])
             ->filters([
@@ -112,11 +110,7 @@ class UserResource extends Resource
 
     public static function getRelations(): array
     {
-
         return [
-
-
-
         ];
     }
 

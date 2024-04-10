@@ -7,7 +7,9 @@ use App\Models\Slab;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -42,83 +44,86 @@ class SlabResource extends Resource
         return $form->schema(components: [
             Hidden::make('user_id')->default(Auth::user()->id),
 
-            Placeholder::make('created_at')
-                ->label('Created Date')
+            Placeholder::make('created_at')->label('Created Date')
                 ->content(fn(?Slab $record): string => $record?->created_at?->diffForHumans() ?? '-')
                 ->hidden(),
 
-            Placeholder::make('updated_at')
-                ->label('Last Modified Date')
+            Placeholder::make('updated_at')->label('Last Modified Date')
                 ->content(fn(?Slab $record): string => $record?->updated_at?->diffForHumans() ?? '-')
                 ->hidden(),
 
-            TextInput::make('name')
-                ->required(),
+            Section::make('SLAB NAME, ORDER NUMBER AND DESCRIPTION')
+                ->description('Please, fill in the details below.')
+                ->schema([
+                    TextInput::make('name')->label('Name'),
 
-            Select::make('type_stone')
-                ->options([
-                    'composite' => 'Composite',
-                    'granite'   => 'Granite',
-                    'marble'    => 'Marble',
-                    'quartz'    => 'Quartz',
-                    'quartzite' => 'Quartzite',
-                    'onyx'      => 'Onyx',
-                    'soapstone' => 'Soapstone',
-                    'porcelain' => 'Porcelain',
-                    'ceramic'   => 'Ceramic',
-                    'dekton'    => 'Dekton',
-                    'neolith'   => 'Neolith',
-                ])
-                ->label('Type of Stone'),
+                    TextInput::make('order_number')->label('Order Number'),
 
-            Radio::make('finish')
-                ->options([
-                    'geschuurd' => 'geschuurd',
-                    'gezoet'    => 'gezoet',
-                    'gepolijst' => 'gepolijst',
-                ])
-                ->label('Afwerking'),
+                    Textarea::make('description')
+                        ->columnSpanFull(),
+                ])->columnSpan(1)->columns(1),
 
-            TextInput::make('physical_position')
-                ->required(),
+            Section::make('SLAB GENERAL INFORMATION')
+                ->description('Please, fill in the details below.')
+                ->schema([
+                    Select::make('type_stone')->label('Type of Stone')
+                        ->options(options: array(
+                            'composite' => 'Composite',
+                            'granite'   => 'Granite',
+                            'marble'    => 'Marble',
+                            'quartz'    => 'Quartz',
+                            'quartzite' => 'Quartzite',
+                            'onyx'      => 'Onyx',
+                            'soapstone' => 'Soapstone',
+                            'porcelain' => 'Porcelain',
+                            'ceramic'   => 'Ceramic',
+                            'dekton'    => 'Dekton',
+                            'neolith'   => 'Neolith',
+                        )),
 
-            TextInput::make('description')
-                ->required(),
+                    Radio::make('finish')->label('Afwerking')
+                        ->options([
+                            'geschuurd' => 'Geschuurd',
+                            'gezoet'    => 'Gezoet',
+                            'gepolijst' => 'Gepolijst',
+                        ]),
 
-            TextInput::make('thickness')
-                ->required()
-                ->integer()
-                ->label('Dikte (mm)'),
+                    TextInput::make('physical_position')->label('Location')
+                        ->required(),
 
-            TextInput::make('width')
-                ->required()
-                ->integer()
-                ->label('Width (mm)'),
+                    TextInput::make('brand')->label('Brand')
+                        ->required(),
 
-            TextInput::make('length')
-                ->required()
-                ->integer()
-                ->label('Length (mm)'),
+                    TextInput::make('supplier')->label('Supplier')
+                        ->required(),
 
-            TextInput::make('quantity')
-                ->required()
-                ->integer(),
+                    TextInput::make('price')->label('Price')
+                        ->numeric(),
+                ])->columnSpan(1)->columns(2),
 
-            Placeholder::make('square_meters')
-                ->content(fn(?Slab $record): string => $record ?
-                    Number::format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity, precision: 2) : '0')
-                ->label('M²'),
+            Section::make('SLAB DIMENSIONS AND QUANTITY')
+                ->description('Please, fill in the details below. (The Square Meters will be calculated automatically)')
+                ->schema([
+                    TextInput::make('thickness')->label('Dikte (mm)')
+                        ->required()
+                        ->integer(),
 
-            TextInput::make('brand')
-                ->required(),
+                    TextInput::make('width')->label('Width (mm)')
+                        ->required()
+                        ->integer(),
 
-            TextInput::make('supplier')
-                ->required(),
+                    TextInput::make('length')->label('Length (mm)')
+                        ->required()
+                        ->integer(),
 
-            TextInput::make('order_number'),
+                    TextInput::make('quantity')->label('Quantity')
+                        ->required()
+                        ->integer(),
 
-            TextInput::make('price')
-                ->numeric(),
+                    Placeholder::make('square_meters')->label('M²')
+                        ->content(fn(?Slab $record): string => $record ?
+                            Number::format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity, precision: 2) : '0'),
+                ])->columnSpan(1)->columns(3),
 
         ])->columns(3);
     }
@@ -126,34 +131,6 @@ class SlabResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
-            /**
-             * Cria uma coluna de texto para o campo 'price'.
-             *
-             * - `sortable()`: torna a coluna ordenável.
-             * - `money('eur')`: formata o valor da coluna como uma quantia em dinheiro na moeda Euro (EUR).
-             * - `getStateUsing()`: personaliza o valor exibido na coluna. Neste caso,
-             *     o preço é armazenado em centavos na base de dados, então dividimos por 100 para converter
-             *     para a unidade de moeda correta.
-             *
-             * @param  Slab  $record  Uma instância do modelo Slab, que representa a linha atual na tabela.
-             * @return float O preço do registro, convertido de centavos para euros.
-             */
-            /*TextColumn::make('price')
-                ->sortable()
-                ->money('EUR')
-                ->getStateUsing(function (Slab $record): float {
-                    return $record->price / 100;
-                }),*/
-            /**
-             * TextColumn::make('user.name')
-             * Este código cria uma coluna de texto para a tabela na interface do usuário.
-             *
-             * TextColumn::make('user.name'): Esta linha cria uma nova coluna de texto para a tabela.
-             * O argumento 'user.name' é o nome do campo no modelo de dados que esta coluna deve exibir.
-             * Neste caso, está exibindo o nome do usuário associado ao registro atual.
-             */
-            /*TextColumn::make('user.name')
-                ->label('Employee'),*/
 
             TextColumn::make('name')->searchable()->sortable()->Label('Name'),
 
@@ -165,18 +142,15 @@ class SlabResource extends Resource
 
             TextColumn::make('quantity')->label('Quantity'),
 
-            TextColumn::make('square_meters')->default(fn(?Slab $record):
-            string => $record ? Number::format
-            (
-                (($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
-                precision: 2) : '0')
-                ->label('M²'),
+            TextColumn::make('square_meters')->label('M²')
+                ->default(fn(?Slab $record): string => $record ?
+                    Number::format(
+                        (($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
+                        precision: 2) : '0'),
 
-            TextColumn::make('type_stone')
-                ->label('Type'),
+            TextColumn::make('type_stone')->label('Type'),
 
-            TextColumn::make('physical_position')
-                ->label('Location'),
+            TextColumn::make('physical_position')->label('Location'),
         ])
             ->filters([
                 TrashedFilter::make(),
