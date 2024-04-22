@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Slab extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes;
 
     protected $fillable
         = [
@@ -21,15 +20,15 @@ class Slab extends Model
             'order_number',
             'price',
             //        'polishment',                         //Foi alterado para finish
-            'finish',
             'thickness',
             'width',
             'length',
             'square_meters',
             'physical_position',
-            'image',
             'user_id',
+            'image',
             'type_stone',
+            'finish',
         ];
 
     public function user(): BelongsTo
@@ -41,5 +40,12 @@ class Slab extends Model
     {
 
         return round($value / 1000000, 2);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'image' => 'array',
+        ];
     }
 }

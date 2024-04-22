@@ -7,7 +7,7 @@ use App\Models\Slab;
 
 class SlabsController extends Controller
 {
-    public function index()
+    public function index(): \Illuminate\Database\Eloquent\Collection
     {
         return Slab::all();
     }
@@ -17,19 +17,19 @@ class SlabsController extends Controller
         return Slab::create($request->validated());
     }
 
-    public function show(Slab $slabs)
+    public function show(Slab $slabs): Slab
     {
         return $slabs;
     }
 
-    public function update(SlabsRequest $request, Slab $slabs)
+    public function update(SlabsRequest $request, Slab $slabs): Slab
     {
         $slabs->update($request->validated());
 
         return $slabs;
     }
 
-    public function destroy(Slab $slabs)
+    public function destroy(Slab $slabs): \Illuminate\Http\JsonResponse
     {
         $slabs->delete();
 

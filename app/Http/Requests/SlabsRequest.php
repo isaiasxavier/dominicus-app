@@ -23,8 +23,11 @@ class SlabsRequest extends FormRequest
             'square_meters' => ['required', 'numeric'],
             'physical_position' => ['required'],
             'user_id' => ['required', 'integer'],
+            'image' => ['nullable', 'string', 'max:8192'], //8MB
         ];
     }
+
+
 
     public function authorize(): bool
     {

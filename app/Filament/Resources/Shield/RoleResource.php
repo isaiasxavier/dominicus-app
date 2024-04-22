@@ -6,6 +6,7 @@ use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use App\Filament\Resources\Shield\RoleResource\Pages;
+use BezhanSalleh\FilamentShield\Forms\ShieldSelectAllToggle;
 use BezhanSalleh\FilamentShield\Support\Utils;
 use Filament\Forms;
 use Filament\Forms\Components\Component;
@@ -23,6 +24,11 @@ class RoleResource extends Resource implements HasShieldPermissions
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static $permissionsCollection;
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user() && auth()->user()->hasRole('super_admin');
+    }
 
     public static function getPermissionPrefixes(): array
     {
@@ -54,7 +60,7 @@ class RoleResource extends Resource implements HasShieldPermissions
                                     ->default(Utils::getFilamentAuthGuard())
                                     ->nullable()
                                     ->maxLength(255),
-                                \BezhanSalleh\FilamentShield\Forms\ShieldSelectAllToggle::make('select_all')
+                                ShieldSelectAllToggle::make('select_all')
                                     ->onIcon('heroicon-s-shield-check')
                                     ->offIcon('heroicon-s-shield-exclamation')
                                     ->label(__('filament-shield::filament-shield.field.select_all.name'))
@@ -123,7 +129,7 @@ class RoleResource extends Resource implements HasShieldPermissions
     public static function getRelations(): array
     {
         return [
-            //
+
         ];
     }
 

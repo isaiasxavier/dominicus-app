@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
@@ -20,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
     }
 }

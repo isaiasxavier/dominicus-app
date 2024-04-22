@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -21,10 +22,6 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
-    /**
-     * @throws \Exception
-     */
-
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -33,7 +30,6 @@ class AdminPanelProvider extends PanelProvider
             ->path('dashboard') // Original 'admin'
             ->login()
             ->profile(isSimple: false)
-//            ->registration()
             ->colors([
                 'primary' => Color::Sky,
                 'info' => Color::Blue,
@@ -68,6 +64,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
+
             ]);
     }
 }

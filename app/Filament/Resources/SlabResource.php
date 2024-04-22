@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SlabResource\Pages;
 use App\Models\Slab;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
@@ -21,6 +23,7 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -52,19 +55,32 @@ class SlabResource extends Resource
                 ->content(fn(?Slab $record): string => $record?->updated_at?->diffForHumans() ?? '-')
                 ->hidden(),
 
-            Section::make('SLAB NAME, ORDER NUMBER AND DESCRIPTION')
-                ->description('Please, fill in the details below.')
+            Group::make()
                 ->schema([
-                    TextInput::make('name')->label('Name'),
+                    Section::make('Please, fill in the details below.')
+                        ->description('')
+                        ->schema([
+                            TextInput::make('name')->label('Name')
+                                ->required(),
 
-                    TextInput::make('order_number')->label('Order Number'),
+                            TextInput::make('order_number')->label('Order Number'),
 
-                    Textarea::make('description')
-                        ->columnSpanFull(),
-                ])->columnSpan(1)->columns(1),
+                            Textarea::make('description')
+                                ->columnSpanFull(),
 
-            Section::make('SLAB GENERAL INFORMATION')
-                ->description('Please, fill in the details below.')
+                        ])->columnSpan(1)->columns(1),
+
+                    FileUpload::make('image')->label('Photo')
+                        ->disk('public')
+                        ->image()
+                        ->imageEditor()
+                        ->acceptedFileTypes(['image/*'])
+                        ->visibility('public'),
+
+                ])->columnSpan(3)->columns(2),
+
+            Section::make('Please, fill in the details below.')
+                ->description('')
                 ->schema([
                     Select::make('type_stone')->label('Type of Stone')
                         ->options(options: array(
@@ -88,31 +104,27 @@ class SlabResource extends Resource
                             'gepolijst' => 'Gepolijst',
                         ]),
 
-                    TextInput::make('physical_position')->label('Location')
-                        ->required(),
+                    TextInput::make('physical_position')->label('Location'),
 
-                    TextInput::make('brand')->label('Brand')
-                        ->required(),
+                    TextInput::make('brand')->label('Brand'),
 
-                    TextInput::make('supplier')->label('Supplier')
-                        ->required(),
+                    TextInput::make('supplier')->label('Supplier'),
 
-                    TextInput::make('price')->label('Price')
-                        ->numeric(),
+                    TextInput::make('price')->label('Price'),
                 ])->columnSpan(1)->columns(2),
 
-            Section::make('SLAB DIMENSIONS AND QUANTITY')
-                ->description('Please, fill in the details below. (The Square Meters will be calculated automatically)')
+            Section::make('All fields are in Millimeters.')
+                ->description('The Square Meters will be calculated automatically')
                 ->schema([
-                    TextInput::make('thickness')->label('Dikte (mm)')
+
+                    TextInput::make('thickness')->label('Dikte')
+                        ->integer(),
+
+                    TextInput::make('width')->label('Width')
                         ->required()
                         ->integer(),
 
-                    TextInput::make('width')->label('Width (mm)')
-                        ->required()
-                        ->integer(),
-
-                    TextInput::make('length')->label('Length (mm)')
+                    TextInput::make('length')->label('Length')
                         ->required()
                         ->integer(),
 
@@ -123,14 +135,18 @@ class SlabResource extends Resource
                     Placeholder::make('square_meters')->label('M²')
                         ->content(fn(?Slab $record): string => $record ?
                             Number::format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity, precision: 2) : '0'),
-                ])->columnSpan(1)->columns(3),
 
-        ])->columns(3);
+                ])->columnSpan(1)->columns(5),
+        ]);
+
+
     }
 
     public static function table(Table $table): Table
     {
         return $table->columns([
+
+            ImageColumn::make('image')->label('Photo'),
 
             TextColumn::make('name')->searchable()->sortable()->Label('Name'),
 

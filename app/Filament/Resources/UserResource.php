@@ -4,14 +4,21 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
-use Filament\Forms;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+
+//
+
 
 class UserResource extends Resource
 {
@@ -19,59 +26,68 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-m-user';
 
+    /*public static function canViewAny(): bool
+    {
+        return auth()->user() && auth()->user()->hasAnyRole(['super_admin', 'admin']);
+    }*/
+
 
     public static function form(Form $form): Form
     {
+
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->label('Name')
-                    ->required()
-                    ->autocomplete('name'),
+                Section::make('User Information')
+                    ->description('Please, fill in the details below.')
+                    ->schema([
+                        TextInput::make('name')->label('Name')
+                            ->required()
+                            ->autocomplete('name'),
 
-                Forms\Components\TextInput::make('email')
-                    ->label('Email')
-                    ->required()
-                    ->autocomplete('email'),
-
-                /*Forms\Components\Select::make('role_id')
-                    ->label('Roles')
-                    ->required()
-                    ->options(
-                        Role::query()->pluck('name', 'id')->toArray()
-                    ),*/
-
-                Radio::make('role_id')
-                    ->options([
-                        'super_admin' => 'Super Admin',
-                        'admin'    => 'Admin',
-                        'panel_user' => 'User',
-                    ])
-                    ->label('Access Level'),
-
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->revealable()
+                        TextInput::make('email')->label('Email')
+                            ->required()
+                            ->autocomplete('email'),
 
 
-            ])->columns(3);
+                    ])->columnSpan(1)->columns(2),
+
+                Section::make('Please, fill in the details below.')
+                    ->description('Please, fill in the details below.')
+                    ->schema([
+
+                        Select::make('roles')
+                            ->preload()
+                            ->relationship('roles', 'name')
+                            ->label('Access Level')
+                            ->required(),
+
+                        TextInput::make('password')->label('Password')
+                            ->password()
+                            ->revealable()
+                        //                            ->required()
+
+                    ])->columnSpan(1)->columns(2),
+
+            ]);
+
+
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns(components: [
+            ->columns(components: array(
                 /*Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->primary(),*/
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->icon('heroicon-m-user')
                     ->iconColor('primary')
                     ->sortable()
                     ->searchable()
                     ->label('Name'),
 
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->icon('heroicon-m-envelope')
                     ->iconColor('primary')
                     ->fontFamily('mono')
@@ -86,24 +102,39 @@ class UserResource extends Resource
                  * @method name  'roles.name' Define o nome da coluna que será usada para buscar os dados.
                  * Neste caso, 'roles.name' indica que estamos buscando o nome do papel (role) na relação 'roles'.
                  */
-                Tables\Columns\TextColumn::make('roles')->label('Access Level')
+                TextColumn::make('roles')->label('Access Level')
                     ->name('roles.name')
                     ->color('access_level')
                     ->sortable()
                     ->searchable()
                     ->badge(),
 
-            ])
+            ))
             ->filters([
                 //
             ])
             ->actions([
-                EditAction::make(),
+                EditAction::make()
+                /*->using(function (Model $record, array $data): Model {
+                    // Busca o nome do papel pelo ID
+                    $roleName = Role::find($data['role_id'])->name;
+
+                    // Remove todos os papéis atuais do usuário e atribui o novo papel
+                    $record->syncRoles([$roleName]);
+
+                    // Atualiza o campo 'model_type' na tabela pivot para 'App\Models\User'
+                    DB::table('model_has_roles')
+                        ->where('model_id', $record->id)
+                        ->update(['model_type' => 'App\Models\User']);
+
+                    return $record;
+                })*/,
                 DeleteAction::make(),
+
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -111,15 +142,16 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
+
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
+            'index'  => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'edit'   => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }
