@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -37,37 +38,41 @@ class UserResource extends Resource
 
         return $form
             ->schema([
-                Section::make('User Information')
-                    ->description('Please, fill in the details below.')
+
+                Group::make()
                     ->schema([
-                        TextInput::make('name')->label('Name')
-                            ->required()
-                            ->autocomplete('name'),
+                        Section::make('User Information')
+                            ->description('Please, fill in the details below.')
+                            ->schema([
+                                TextInput::make('name')->label('Name')
+                                    ->required()
+                                    ->autocomplete('name'),
 
-                        TextInput::make('email')->label('Email')
-                            ->required()
-                            ->autocomplete('email'),
+                                TextInput::make('email')->label('Email')
+                                    ->required()
+                                    ->autocomplete('email'),
 
 
-                    ])->columnSpan(1)->columns(2),
+                            ])->columnSpan(1)->columns(2),
 
-                Section::make('Please, fill in the details below.')
-                    ->description('Please, fill in the details below.')
-                    ->schema([
+                        Section::make('Please, fill in the details below.')
+                            ->description('Please, fill in the details below.')
+                            ->schema([
 
-                        Select::make('roles')
-                            ->preload()
-                            ->relationship('roles', 'name')
-                            ->label('Access Level')
-                            ->required(),
+                                Select::make('roles')
+                                    ->preload()
+                                    ->relationship('roles', 'name')
+                                    ->label('Access Level')
+                                    ->required(),
 
-                        TextInput::make('password')->label('Password')
-                            ->password()
-                            ->revealable()
-                        //                            ->required()
+                                TextInput::make('password')->label('Password')
+                                    ->password()
+                                    ->revealable()
+                                //                            ->required()
 
-                    ])->columnSpan(1)->columns(2),
+                            ])->columnSpan(1)->columns(2),
 
+                    ])->columnSpan(1)->columns(3)
             ]);
 
 

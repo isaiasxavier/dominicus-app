@@ -23,6 +23,15 @@ class CreateSlab extends CreateRecord
         return $data;
     }
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['price'] *= 100;
+
+        $data['square_meters'] = ($data['width'] * $data['length']) * $data['quantity'];
+
+        return $data;
+    }
+
     protected function getHeaderActions(): array
     {
         return [

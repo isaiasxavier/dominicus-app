@@ -79,40 +79,45 @@ class SlabResource extends Resource
 
                 ])->columnSpan(3)->columns(2),
 
-            Section::make('Please, fill in the details below.')
-                ->description('')
+            Group::make()
                 ->schema([
-                    Select::make('type_stone')->label('Type of Stone')
-                        ->options(options: array(
-                            'composite' => 'Composite',
-                            'granite'   => 'Granite',
-                            'marble'    => 'Marble',
-                            'quartz'    => 'Quartz',
-                            'quartzite' => 'Quartzite',
-                            'onyx'      => 'Onyx',
-                            'soapstone' => 'Soapstone',
-                            'porcelain' => 'Porcelain',
-                            'ceramic'   => 'Ceramic',
-                            'dekton'    => 'Dekton',
-                            'neolith'   => 'Neolith',
-                        )),
+                    Section::make('Please, fill in the details below.')
+                        ->description('')
+                        ->schema([
+                            Select::make('type_stone')->label('Type of Stone')
+                                ->options([
+                                    'composite' => 'Composite',
+                                    'granite'   => 'Granite',
+                                    'marble'    => 'Marble',
+                                    'quartz'    => 'Quartz',
+                                    'quartzite' => 'Quartzite',
+                                    'onyx'      => 'Onyx',
+                                    'soapstone' => 'Soapstone',
+                                    'porcelain' => 'Porcelain',
+                                    'ceramic'   => 'Ceramic',
+                                    'dekton'    => 'Dekton',
+                                    'neolith'   => 'Neolith',
+                                ]),
 
-                    Radio::make('finish')->label('Afwerking')
-                        ->options([
-                            'geschuurd' => 'Geschuurd',
-                            'gezoet'    => 'Gezoet',
-                            'gepolijst' => 'Gepolijst',
-                        ]),
+                            Radio::make('finish')->label('Afwerking')
+                                ->options([
+                                    'geschuurd' => 'Geschuurd',
+                                    'gezoet'    => 'Gezoet',
+                                    'gepolijst' => 'Gepolijst',
+                                ]),
 
-                    TextInput::make('physical_position')->label('Location'),
+                            TextInput::make('physical_position')->label('Location'),
 
-                    TextInput::make('brand')->label('Brand'),
+                            TextInput::make('brand')->label('Brand'),
 
-                    TextInput::make('supplier')->label('Supplier'),
+                            TextInput::make('supplier')->label('Supplier'),
 
-                    TextInput::make('price')->label('Price'),
-                ])->columnSpan(1)->columns(2),
+                            TextInput::make('price')->label('Price'),
+                        ])->columnSpan(1)->columns(2),
+                ])->columnSpan(3)->columns(2),
 
+            Group::make()
+                ->schema([
             Section::make('All fields are in Millimeters.')
                 ->description('The Square Meters will be calculated automatically')
                 ->schema([
@@ -137,6 +142,7 @@ class SlabResource extends Resource
                             Number::format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity, precision: 2) : '0'),
 
                 ])->columnSpan(1)->columns(5),
+        ])->columnSpan(3)->columns(2),
         ]);
 
 
@@ -148,7 +154,7 @@ class SlabResource extends Resource
 
             ImageColumn::make('image')->label('Photo'),
 
-            TextColumn::make('name')->searchable()->sortable()->Label('Name'),
+            TextColumn::make('name')->searchable()->Label('Name'),
 
             TextColumn::make('order_number')->label('Order Number'),
 
@@ -156,9 +162,9 @@ class SlabResource extends Resource
 
             TextColumn::make('thickness')->label('Dikte (mm)'),
 
-            TextColumn::make('quantity')->label('Quantity'),
+            TextColumn::make('quantity')->sortable()->label('Quantity'),
 
-            TextColumn::make('square_meters')->label('M²')
+            TextColumn::make('square_meters')->sortable()->label('M²')
                 ->default(fn(?Slab $record): string => $record ?
                     Number::format(
                         (($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
