@@ -51,13 +51,6 @@ class User extends Authenticatable implements FilamentUser
 
         return $this;
     }*/
-
-    /*protected static function booted(): void
-    {
-        static::created(function (User $user) {
-            $user->assignRole('user');
-        });
-    }*/
     protected $fillable = [
         'name',
         'email',
@@ -67,7 +60,6 @@ class User extends Authenticatable implements FilamentUser
         'model_type',
 
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -77,6 +69,19 @@ class User extends Authenticatable implements FilamentUser
         'password',
         'remember_token',
     ];
+
+
+    protected static function booted(): void
+    {
+        static::created(function(User $user){
+            $user->assignRole('user');
+        });
+    }
+
+    public function slabs()
+    {
+        return $this->hasMany(Slab::class);
+    }
 
     /**
      * This function establishes a many-to-many relationship between the User model and the Role model.

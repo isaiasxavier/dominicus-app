@@ -24,22 +24,30 @@ class Slab extends Model
             'width',
             'length',
             'square_meters',
-            'physical_position',
+            'warehouse_position',
             'user_id',
             'image',
             'type_stone',
-            'finish',
+            'finishing',
         ];
+
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function getSquareMetersAttribute($value): float|int
-    {
 
-        return round($value / 1000000, 2);
+    public function setPriceAttribute($value)
+    {
+        // Transforma o valor para inteiro antes de salvar no banco de dados
+        $this->attributes['price'] = $value * 100;
+    }
+
+    public function getPriceAttribute($value)
+    {
+        // Formata o valor para duas casas decimais quando recuperado
+        return $value / 100;
     }
 
     protected function casts(): array

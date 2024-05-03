@@ -3,31 +3,29 @@
 namespace App\Filament\Resources\SlabResource\Pages;
 
 use App\Filament\Resources\SlabResource;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateSlab extends CreateRecord
 {
     protected static string $resource = SlabResource::class;
 
-    public function publicMutateFormDataBeforeCreate(array $data): array
-    {
-        return $this->mutateFormDataBeforeCreate($data);
-    }
+
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['price'] *= 100;
-
-        $data['square_meters'] = round((($data['width'] * $data['length']) / 1000000) * $data['quantity'], 2);
+        $squareMeters = (($data['width'] / 1000) * ($data['length'] / 1000)) * $data['quantity'];
+        $data['square_meters'] = round($squareMeters, 2);
 
         return $data;
     }
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $data['price'] *= 100;
+        info('mutateFormDataBeforeSave is being called');
 
-        $data['square_meters'] = ($data['width'] * $data['length']) * $data['quantity'];
+        $squareMeters = (($data['width'] / 1000) * ($data['length'] / 1000)) * $data['quantity'];
+        $data['square_meters'] = round($squareMeters, 2);
 
         return $data;
     }

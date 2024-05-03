@@ -12,6 +12,35 @@ class EditSlab extends EditRecord
 {
     protected static string $resource = SlabResource::class;
 
+    public function publicMutateFormDataBeforeEdit(array $data): array
+    {
+        $beforeCreate = $this->mutateFormDataBeforeFill($data);
+        $beforeSave   = $this->mutateFormDataBeforeSave($data);
+        return [
+            'beforeFill' => $beforeCreate,
+            'beforeSave' => $beforeSave,
+        ];
+    }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $squareMeters = (($data['width'] / 1000) * ($data['length'] / 1000)) * $data['quantity'];
+        $data['square_meters'] = round($squareMeters, 2);
+
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        info('mutateFormDataBeforeSave is being called');
+
+        $squareMeters = (($data['width'] / 1000) * ($data['length'] / 1000)) * $data['quantity'];
+        $data['square_meters'] = round($squareMeters, 2);
+
+        return $data;
+    }
+
+
     protected function getHeaderActions(): array
     {
         return [
@@ -19,26 +48,6 @@ class EditSlab extends EditRecord
             ForceDeleteAction::make(),
             RestoreAction::make(),
         ];
-    }
-
-
-    protected function mutateFormDataBeforeFill(array $data): array
-    {
-        $data['price'] /= 100;
-
-        $data['square_meters'] = ($data['width'] * $data['length'] / 1000000) * $data['quantity'];
-
-        return $data;
-    }
-
-
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        $data['price'] *= 100;
-
-        $data['square_meters'] = ($data['width'] * $data['length']) * $data['quantity'];
-
-        return $data;
     }
 
 }

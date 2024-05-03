@@ -4,11 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SlabResource\Pages;
 use App\Models\Slab;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -31,7 +30,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Number;
+
 
 class SlabResource extends Resource
 {
@@ -55,74 +54,20 @@ class SlabResource extends Resource
                 ->content(fn(?Slab $record): string => $record?->updated_at?->diffForHumans() ?? '-')
                 ->hidden(),
 
-            Group::make()
+
+            Section::make('')
+                ->description('Name is required')
                 ->schema([
-                    Section::make('Please, fill in the details below.')
-                        ->description('')
-                        ->schema([
-                            TextInput::make('name')->label('Name')
-                                ->required(),
+                    TextInput::make('name')->label('Name')
+                        ->required(),
 
-                            TextInput::make('order_number')->label('Order Number'),
+                ])->columnSpan(1)->columns(1),
 
-                            Textarea::make('description')
-                                ->columnSpanFull(),
-
-                        ])->columnSpan(1)->columns(1),
-
-                    FileUpload::make('image')->label('Photo')
-                        ->disk('public')
-                        ->image()
-                        ->imageEditor()
-                        ->acceptedFileTypes(['image/*'])
-                        ->visibility('public'),
-
-                ])->columnSpan(3)->columns(2),
-
-            Group::make()
+            Section::make('')
+                ->description('All fields are required in MM | M² is calculated automatically')
                 ->schema([
-                    Section::make('Please, fill in the details below.')
-                        ->description('')
-                        ->schema([
-                            Select::make('type_stone')->label('Type of Stone')
-                                ->options([
-                                    'composite' => 'Composite',
-                                    'granite'   => 'Granite',
-                                    'marble'    => 'Marble',
-                                    'quartz'    => 'Quartz',
-                                    'quartzite' => 'Quartzite',
-                                    'onyx'      => 'Onyx',
-                                    'soapstone' => 'Soapstone',
-                                    'porcelain' => 'Porcelain',
-                                    'ceramic'   => 'Ceramic',
-                                    'dekton'    => 'Dekton',
-                                    'neolith'   => 'Neolith',
-                                ]),
-
-                            Radio::make('finish')->label('Afwerking')
-                                ->options([
-                                    'geschuurd' => 'Geschuurd',
-                                    'gezoet'    => 'Gezoet',
-                                    'gepolijst' => 'Gepolijst',
-                                ]),
-
-                            TextInput::make('physical_position')->label('Location'),
-
-                            TextInput::make('brand')->label('Brand'),
-
-                            TextInput::make('supplier')->label('Supplier'),
-
-                            TextInput::make('price')->label('Price'),
-                        ])->columnSpan(1)->columns(2),
-                ])->columnSpan(3)->columns(2),
-
-            Group::make()
-                ->schema([
-            Section::make('All fields are in Millimeters.')
-                ->description('The Square Meters will be calculated automatically')
-                ->schema([
-
                     TextInput::make('thickness')->label('Dikte')
+                        ->required()
                         ->integer(),
 
                     TextInput::make('width')->label('Width')
@@ -135,16 +80,146 @@ class SlabResource extends Resource
 
                     TextInput::make('quantity')->label('Quantity')
                         ->required()
+                        ->live()
                         ->integer(),
 
-                    Placeholder::make('square_meters')->label('M²')
-                        ->content(fn(?Slab $record): string => $record ?
-                            Number::format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity, precision: 2) : '0'),
+                    textInput::make('square_meters')->label('M²')
+                        ->visible(fn(?Slab $record): string => $record ?
+                            number_format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
+                                2,
+                                '.',
+                                '') : '0')
+                        ->readOnly(),
 
                 ])->columnSpan(1)->columns(5),
-        ])->columnSpan(3)->columns(2),
-        ]);
 
+            Section::make('')
+                ->description('All fields are optional')
+                ->schema([
+                    TextInput::make('order_number')->label('Order Number'),
+
+                    Select::make('brand')->label('Brand')
+                        ->options([
+                            'Cosentino'   => 'Cosentino',
+                            'Caesarstone' => 'Caesarstone',
+                            'Diresco'     => 'Diresco',
+                            'Compac'      => 'Compac',
+                            'TheSize'     => 'TheSize',
+                            'Porcelanosa' => 'Porcelanosa',
+                            'Levantina'   => 'Levantina',
+                            'Laminam'     => 'Laminam',
+                            'Other'       => 'Other',
+                        ]),
+
+                    Select::make('supplier')->label('Supplier')
+                        ->options([
+                            'Cosentino'   => 'Cosentino',
+                            'Caesarstone' => 'Caesarstone',
+                            'Diresco'     => 'Diresco',
+                            'Compac'      => 'Compac',
+                            'Other'       => 'Other',
+                        ]),
+
+                    TextInput::make('price')->label('Price'),
+
+                ])->columnSpan(1)->columns(4),
+
+            Section::make('')
+                ->description('All fields are optional')
+                ->schema([
+                    Select::make('type_stone')->label('Type of Stone')
+                        ->options([
+                            'Composite' => 'Composite',
+                            'Granite'   => 'Granite',
+                            'Marble'    => 'Marble',
+                            'Quartz'    => 'Quartz',
+                            'Quartzite' => 'Quartzite',
+                            'Onyx'      => 'Onyx',
+                            'Soapstone' => 'Soapstone',
+                            'porcelain' => 'Porcelain',
+                            'Ceramic'   => 'Ceramic',
+                            'Dekton'    => 'Dekton',
+                            'Neolith'   => 'Neolith'
+                        ]),
+
+                    Select::make('finishing')->label('Afwerking')
+                        ->options([
+                            'Geschuurd' => 'Geschuurd',
+                            'Gezoet'    => 'Gezoet',
+                            'Gepolijst' => 'Gepolijst'
+                        ]),
+
+                    Select::make('warehouse_position')->label('Location')
+                        ->options([
+                            'A1' => 'A1',
+                            'A2' => 'A2',
+                            'A3' => 'A3',
+                            'A4' => 'A4',
+                            'B1' => 'B1',
+                            'B2' => 'B2',
+                            'B3' => 'B3',
+                            'B4' => 'B4',
+                            'C1' => 'C1',
+                            'C2' => 'C2',
+                            'C3' => 'C3',
+                            'C4' => 'C4',
+                            'D1' => 'D1',
+                            'D2' => 'D2',
+                            'D3' => 'D3',
+                            'D4' => 'D4'
+                        ]),
+
+                ])->columnSpan(1)->columns(3),
+
+            /*Section::make('')
+                ->description('')
+                ->schema([
+                    Select::make('brand')->label('Brand')
+                        ->options([
+                            'Cosentino'   => 'Cosentino',
+                            'Caesarstone' => 'Caesarstone',
+                            'Diresco'     => 'Diresco',
+                            'Compac'      => 'Compac',
+                            'TheSize'     => 'TheSize',
+                            'Porcelanosa' => 'Porcelanosa',
+                            'Levantina'   => 'Levantina',
+                            'Laminam'     => 'Laminam',
+                            'Other'       => 'Other',
+                        ]),
+
+                    Select::make('supplier')->label('Supplier')
+                        ->options([
+                            'Cosentino'   => 'Cosentino',
+                            'Caesarstone' => 'Caesarstone',
+                            'Diresco'     => 'Diresco',
+                            'Compac'      => 'Compac',
+                            'Other'       => 'Other',
+                        ]),
+
+                    TextInput::make('price')->label('Price'),
+                ])->columnSpan(1)->columns(3),*/
+
+            Section::make('')
+                ->description('Description is optional')
+                ->schema([
+                    Textarea::make('description')
+                        ->columnSpanFull(),
+
+                ])->columnSpan(1)->columns(1),
+
+            Fieldset::make('Photo is Optional')
+                ->schema([
+                    FileUpload::make('image')->label('Photo')
+                        ->disk('public')
+                        ->image()
+                        ->directory('slabs')
+                        ->imageEditor()
+                        ->acceptedFileTypes(['image/*'])
+                        ->visibility('public'),
+
+                ])->columnSpan(1)->columns(1)
+
+        ]);
 
     }
 
@@ -158,7 +233,7 @@ class SlabResource extends Resource
 
             TextColumn::make('order_number')->label('Order Number'),
 
-            TextColumn::make('finish')->label('Afwerking'),
+            TextColumn::make('finishing')->label('Afwerking'),
 
             TextColumn::make('thickness')->label('Dikte (mm)'),
 
@@ -166,13 +241,14 @@ class SlabResource extends Resource
 
             TextColumn::make('square_meters')->sortable()->label('M²')
                 ->default(fn(?Slab $record): string => $record ?
-                    Number::format(
-                        (($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
-                        precision: 2) : '0'),
+                    number_format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
+                        2,
+                        '.',
+                        '') : '0'),
 
             TextColumn::make('type_stone')->label('Type'),
 
-            TextColumn::make('physical_position')->label('Location'),
+            TextColumn::make('warehouse_position')->label('Location'),
         ])
             ->filters([
                 TrashedFilter::make(),
