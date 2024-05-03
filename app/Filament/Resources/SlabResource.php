@@ -59,7 +59,12 @@ class SlabResource extends Resource
                 ->description('Name is required')
                 ->schema([
                     TextInput::make('name')->label('Name')
-                        ->required(),
+                        ->required()
+                        ->datalist([
+                            'Calacatta Gold',
+                            'Dekton Laurent',
+                            'Dekton Kelya',
+                        ]),
 
                 ])->columnSpan(1)->columns(1),
 

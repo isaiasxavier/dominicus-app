@@ -71,12 +71,12 @@ class User extends Authenticatable implements FilamentUser
     ];
 
 
-    protected static function booted(): void
+    /*protected static function booted(): void
     {
         static::created(function(User $user){
             $user->assignRole('user');
         });
-    }
+    }*/
 
     public function slabs()
     {

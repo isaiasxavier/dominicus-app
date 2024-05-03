@@ -39,8 +39,7 @@ class UserResource extends Resource
         return $form
             ->schema([
 
-                Group::make()
-                    ->schema([
+
                         Section::make('User Information')
                             ->description('Please, fill in the details below.')
                             ->schema([
@@ -53,7 +52,7 @@ class UserResource extends Resource
                                     ->autocomplete('email'),
 
 
-                            ])->columnSpan(1)->columns(2),
+                            ])->columnSpan(1)->columns(1),
 
                         Section::make('Please, fill in the details below.')
                             ->description('Please, fill in the details below.')
@@ -70,9 +69,9 @@ class UserResource extends Resource
                                     ->revealable()
                                 //                            ->required()
 
-                            ])->columnSpan(1)->columns(2),
+                            ])->columnSpan(1)->columns(1),
 
-                    ])->columnSpan(1)->columns(3)
+
             ]);
 
 
