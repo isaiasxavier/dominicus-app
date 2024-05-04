@@ -39,6 +39,12 @@ class AdminPanelProvider extends PanelProvider
                 'access_level' => Color::Fuchsia,
                 'gray' => Color::Gray,
             ])
+            ->renderHook(
+            // This line tells us where to render it
+                'panels::body.end',
+                // This is the view that will be rendered
+                fn () => view('customFooter'),
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -47,7 +53,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
