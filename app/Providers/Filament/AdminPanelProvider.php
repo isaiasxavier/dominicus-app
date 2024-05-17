@@ -26,24 +26,24 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('dashboard') // Original 'admin'
-            ->path('dashboard') // Original 'admin'
+            ->id('dashboard')
+            ->path('dashboard')
             ->login()
             ->profile(isSimple: false)
             ->colors([
-                'primary' => Color::Sky,
-                'info' => Color::Blue,
-                'danger' => Color::Red,
-                'success' => Color::Green,
-                'warning' => Color::Yellow,
+                'primary'      => Color::Sky,
+                'info'         => Color::Blue,
+                'danger'       => Color::Red,
+                'success'      => Color::Green,
+                'warning'      => Color::Yellow,
                 'access_level' => Color::Fuchsia,
-                'gray' => Color::Gray,
+                'gray'         => Color::Gray,
             ])
             ->renderHook(
             // This line tells us where to render it
                 'panels::body.end',
                 // This is the view that will be rendered
-                fn () => view('customFooter'),
+                fn() => view('customFooter'),
             )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -70,7 +70,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make()
-
             ]);
     }
 }

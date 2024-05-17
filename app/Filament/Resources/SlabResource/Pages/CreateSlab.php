@@ -10,8 +10,6 @@ class CreateSlab extends CreateRecord
 {
     protected static string $resource = SlabResource::class;
 
-
-
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $squareMeters = (($data['width'] / 1000) * ($data['length'] / 1000)) * $data['quantity'];

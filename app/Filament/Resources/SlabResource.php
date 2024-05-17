@@ -14,6 +14,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -125,7 +126,11 @@ class SlabResource extends Resource
                             'Other'       => 'Other',
                         ]),
 
-                    TextInput::make('price')->label('Price'),
+                    TextInput::make('price')->label('Price')
+                        ->mask(RawJs::make('$money($input)'))
+                        ->prefix('€')
+                        ->stripCharacters(',')
+                        ->numeric(),
 
                 ])->columnSpan(1)->columns(4),
 
