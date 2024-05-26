@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Role;
 
 class Slab extends Model
 {
@@ -35,6 +37,7 @@ class Slab extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 
     public function setPriceAttribute($value)
     {

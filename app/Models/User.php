@@ -93,7 +93,7 @@ class User extends Authenticatable implements FilamentUser
      * 'model_id' is the name of the column in the intermediate table that is related to the User model,
      * 'role_id' is the name of the column in the intermediate table that is related to the Role model.
      */
-    public function roles_user(): BelongsToMany
+    public function rolesUser(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id');
     }

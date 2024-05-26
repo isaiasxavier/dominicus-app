@@ -13,8 +13,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Support\RawJs;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -264,10 +270,85 @@ class SlabResource extends Resource
                 TrashedFilter::make(),
             ])
             ->actions([
+                Action::make('View')
+                    ->label('Info')
+                    ->icon('heroicon-o-eye')
+                    ->infolist([
+                        Split::make([
+                            InfolistSection::make('USER INFO')
+                                ->schema([
+                                    TextEntry::make('user.name')->label('User')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('success'),
+                                    TextEntry::make('user.rolesUser.name')->label('Access Level')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('access_level'),
+                                ])->columns(),
+                            InfolistSection::make('SLAB REGISTERED/UPDATED INFO')
+                                ->schema([
+                                    TextEntry::make('created_at')->label('Registered Date')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('warning'),
+                                    TextEntry::make('updated_at')->label('Updated Date')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('warning'),
+                                ])->columns(),
+                        ])->from('md'),
+                        Split::make([
+                            InfolistSection::make('SLAB INFO')
+                                ->schema([
+                                    TextEntry::make('name')->label('Name')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('thickness')->label('Dikte')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('width')->label('Width')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('length')->label('Length')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('quantity')->label('Quantity')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('square_meters')->label('M²')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('order_number')->label('Order Number')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('brand')->label('Brand')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('supplier')->label('Supplier')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('price')->label('Price')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('type_stone')->label('Type of Stone')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                    TextEntry::make('warehouse_position')->label('Location')
+                                        ->weight(FontWeight::Bold)
+                                        ->color('info'),
+                                ])->columns(4),
+                        ])->from('md'),
+                        Split::make([
+                            InfolistSection::make()
+                                ->schema([
+                                    imageEntry::make('image')->label('Photo')
+                                        ->width(800)
+                                        ->height(400),
+                                ])->columns(),
+                        ])->from('md'),
+                    ]),
                 EditAction::make(),
                 DeleteAction::make(),
                 RestoreAction::make(),
                 ForceDeleteAction::make(),
+
             ])
             ->bulkActions([
                 BulkActionGroup::make([
