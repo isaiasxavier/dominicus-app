@@ -312,7 +312,7 @@ class SlabResource extends Resource
                                     TextEntry::make('quantity')->label('Quantity')
                                         ->weight(FontWeight::Bold)
                                         ->color('info'),
-                                    TextEntry::make('square_meters')->label('M² - Square Meters')
+                                    TextEntry::make('square_meters')->label('M²')
                                         ->weight(FontWeight::Bold)
                                         ->color('info'),
                                     TextEntry::make('order_number')->label('Order Number')
