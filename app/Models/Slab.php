@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Permission\Models\Role;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+
 
 class Slab extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
 
     protected $fillable
         = [
@@ -33,6 +34,7 @@ class Slab extends Model
             'finishing',
         ];
 
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -49,6 +51,30 @@ class Slab extends Model
     {
         // Formata o valor para duas casas decimais quando recuperado
         return $value / 100;
+    }
+
+    /**
+     * @return LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name',
+                       'brand',
+                       'description',
+                       'quantity',
+                       'supplier',
+                       'order_number',
+                       'price',
+                       'thickness',
+                       'width',
+                       'length',
+                       'square_meters',
+                       'warehouse_position',
+                       'user_id',
+                       'image',
+                       'type_stone',
+                       'finishing']);
     }
 
     protected function casts(): array
