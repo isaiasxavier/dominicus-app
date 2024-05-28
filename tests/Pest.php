@@ -13,7 +13,7 @@
 
 uses(
     Tests\TestCase::class,
-    // Illuminate\Foundation\Testing\RefreshDatabase::class,
+// Illuminate\Foundation\Testing\RefreshDatabase::class,
 )->in('Feature');
 
 /*
@@ -27,7 +27,7 @@ uses(
 |
 */
 
-expect()->extend('toBeOne', function () {
+expect()->extend('toBeOne', function (){
     return $this->toBe(1);
 });
 

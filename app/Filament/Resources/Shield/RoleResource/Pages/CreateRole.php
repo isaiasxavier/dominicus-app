@@ -17,8 +17,8 @@ class CreateRole extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $this->permissions = collect($data)
-            ->filter(function ($permission, $key) {
-                return ! in_array($key, ['name', 'guard_name', 'select_all']);
+            ->filter(function ($permission, $key){
+                return !in_array($key, ['name', 'guard_name', 'select_all']);
             })
             ->values()
             ->flatten()
@@ -30,10 +30,10 @@ class CreateRole extends CreateRecord
     protected function afterCreate(): void
     {
         $permissionModels = collect();
-        $this->permissions->each(function ($permission) use ($permissionModels) {
+        $this->permissions->each(function ($permission) use ($permissionModels){
             $permissionModels->push(Utils::getPermissionModel()::firstOrCreate([
                 /** @phpstan-ignore-next-line */
-                'name' => $permission,
+                'name'       => $permission,
                 'guard_name' => $this->data['guard_name'],
             ]));
         });

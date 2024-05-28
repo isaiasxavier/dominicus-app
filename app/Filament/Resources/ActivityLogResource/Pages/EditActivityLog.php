@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\ActivityLogResource\Pages;
 
 use App\Filament\Resources\ActivityLogResource;
-use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditActivityLog extends EditRecord

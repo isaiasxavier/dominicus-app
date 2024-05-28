@@ -59,22 +59,24 @@ class Slab extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['name',
-                       'brand',
-                       'description',
-                       'quantity',
-                       'supplier',
-                       'order_number',
-                       'price',
-                       'thickness',
-                       'width',
-                       'length',
-                       'square_meters',
-                       'warehouse_position',
-                       'user_id',
-                       'image',
-                       'type_stone',
-                       'finishing']);
+            ->logOnly([
+                'name',
+                'brand',
+                'description',
+                'quantity',
+                'supplier',
+                'order_number',
+                'price',
+                'thickness',
+                'width',
+                'length',
+                'square_meters',
+                'warehouse_position',
+                'user_id',
+                'image',
+                'type_stone',
+                'finishing'
+            ]);
     }
 
     protected function casts(): array

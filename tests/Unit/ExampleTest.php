@@ -1,4 +1,5 @@
 <?php
+
 /*
 Este teste verifica se `true` é igual a `true`.
 
@@ -10,6 +11,6 @@ Aqui está uma explicação passo a passo do que o teste está fazendo:
 
 Como `true` sempre será igual a `true`, este teste sempre passará.
 */
-test('Teste que true eh true', function () {
+test('Teste que true eh true', function (){
     expect(true)->toBeTrue();
 });

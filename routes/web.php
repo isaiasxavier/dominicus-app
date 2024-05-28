@@ -3,17 +3,15 @@
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/', function (){
     return redirect('/dashboard');
 });
 
-Route::get('/help', function () {
-
+Route::get('/help', function (){
     return view('help');
 });
 
-Route::get('/homeaula', function () {
-
+Route::get('/homeaula', function (){
     return view('homeaula');
 });
 

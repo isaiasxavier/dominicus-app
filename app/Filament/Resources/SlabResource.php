@@ -14,9 +14,9 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\RawJs;
@@ -97,10 +97,12 @@ class SlabResource extends Resource
 
                     textInput::make('square_meters')->label('M²')
                         ->visible(fn(?Slab $record): string => $record ?
-                            number_format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
+                            number_format(
+                                (($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
                                 2,
                                 '.',
-                                '') : '0')
+                                ''
+                            ) : '0')
                         ->readOnly(),
 
                 ])->columnSpan(1)->columns(5),
@@ -236,7 +238,6 @@ class SlabResource extends Resource
                 ])->columnSpan(1)->columns(1)
 
         ]);
-
     }
 
     public static function table(Table $table): Table
@@ -257,10 +258,12 @@ class SlabResource extends Resource
 
             TextColumn::make('square_meters')->sortable()->label('M²')
                 ->default(fn(?Slab $record): string => $record ?
-                    number_format((($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
+                    number_format(
+                        (($record->width / 1000) * ($record->length / 1000)) * $record->quantity,
                         2,
                         '.',
-                        '') : '0'),
+                        ''
+                    ) : '0'),
 
             TextColumn::make('type_stone')->label('Type'),
 
@@ -388,7 +391,7 @@ class SlabResource extends Resource
     ): array{
         $details = [];
 
-        if($record->user){
+        if ($record->user) {
             $details['User'] = $record->user->name;
         }
 

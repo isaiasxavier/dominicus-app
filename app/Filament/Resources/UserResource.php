@@ -33,7 +33,6 @@ class UserResource extends Resource
 
     public static function form(Form $form): Form
     {
-
         return $form
             ->schema([
                 Section::make('User Information')
@@ -68,8 +67,6 @@ class UserResource extends Resource
                     ])->columnSpan(1)->columns(1),
 
             ]);
-
-
     }
 
     public static function table(Table $table): Table

@@ -19,8 +19,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 
-
-
 class ActivityLogResource extends Resource
 {
 
@@ -40,39 +38,39 @@ class ActivityLogResource extends Resource
     {
         return $form
             ->schema([
-                      /*Placeholder::make('created_at')
-                          ->label('Created Date')
-                          ->content(fn(?ActivityLog $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                /*Placeholder::make('created_at')
+                    ->label('Created Date')
+                    ->content(fn(?ActivityLog $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
-                      Placeholder::make('updated_at')
-                          ->label('Last Modified Date')
-                          ->content(fn(?ActivityLog $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                Placeholder::make('updated_at')
+                    ->label('Last Modified Date')
+                    ->content(fn(?ActivityLog $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
-                      TextInput::make('log_name')
-                          ->required(),
+                TextInput::make('log_name')
+                    ->required(),
 
-                      TextInput::make('description')
-                          ->required(),
+                TextInput::make('description')
+                    ->required(),
 
-                      TextInput::make('subject_type')
-                          ->required(),
+                TextInput::make('subject_type')
+                    ->required(),
 
-                      TextInput::make('event')
-                          ->required(),
+                TextInput::make('event')
+                    ->required(),
 
-                      TextInput::make('subject_id')
-                          ->required()
-                          ->integer(),
+                TextInput::make('subject_id')
+                    ->required()
+                    ->integer(),
 
-                      TextInput::make('causer_type')
-                          ->required(),
+                TextInput::make('causer_type')
+                    ->required(),
 
-                      TextInput::make('causer_id')
-                          ->required()
-                          ->integer(),
+                TextInput::make('causer_id')
+                    ->required()
+                    ->integer(),
 
-                      TextInput::make('batch_uuid')
-                          ->required(),*/
+                TextInput::make('batch_uuid')
+                    ->required(),*/
             ]);
     }
 
@@ -178,7 +176,7 @@ class ActivityLogResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListActivityLogs::route('/'),
+            'index' => Pages\ListActivityLogs::route('/'),
             /*'create' => Pages\CreateActivityLog::route('/create'),*/
             /*'edit'   => Pages\EditActivityLog::route('/{record}/edit'),*/
         ];

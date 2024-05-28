@@ -1,10 +1,11 @@
 <?php
 
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
-it('allows super_admin user (Isaias) to access /dashboard (/admin)', function () {
+it('allows super_admin user (Isaias) to access /dashboard (/admin)', function (){
     $user = User::where('email', 'isaiasxavier@dominicus.nl')->first();
     $this->assertNotNull($user);
 
@@ -17,7 +18,7 @@ it('allows super_admin user (Isaias) to access /dashboard (/admin)', function ()
 });
 
 
-it('allows super_admin user (Simon) to access /dashboard (/admin)', function () {
+it('allows super_admin user (Simon) to access /dashboard (/admin)', function (){
     $user = User::where('email', 'simon@dominicus.nl')->first();
     $this->assertNotNull($user);
 
@@ -30,8 +31,7 @@ it('allows super_admin user (Simon) to access /dashboard (/admin)', function () 
 });
 
 
-
-it('allows admin (dennis) user to access /dashboard (/admin)', function () {
+it('allows admin (dennis) user to access /dashboard (/admin)', function (){
     $user = User::where('email', 'dennis@dominicus.nl')->first();
     $this->assertNotNull($user);
 
@@ -43,7 +43,7 @@ it('allows admin (dennis) user to access /dashboard (/admin)', function () {
     $this->assertTrue($user->hasRole('admin'));
 });
 
-it('allows admin (Yesser) user to access /dashboard (/admin)', function () {
+it('allows admin (Yesser) user to access /dashboard (/admin)', function (){
     $user = User::where('email', 'yesser@dominicus.nl')->first();
     $this->assertNotNull($user);
 

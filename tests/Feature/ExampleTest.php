@@ -1,4 +1,5 @@
 <?php
+
 /*
 Este teste verifica se a rota principal (`/`) do aplicativo está funcionando corretamente.
 
@@ -14,7 +15,7 @@ Se a rota principal do aplicativo estiver funcionando corretamente e retornar um
 então este teste passará. Se a rota principal não estiver funcionando corretamente ou se a resposta tiver um status HTTP diferente de 200,
 então este teste falhará.
 */
-test('testa se a rota principal funciona', function () {
+test('testa se a rota principal funciona', function (){
     $response = $this->get('/dashboard/login');
 
     $response->assertStatus(200);

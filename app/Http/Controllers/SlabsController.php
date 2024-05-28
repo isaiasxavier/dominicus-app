@@ -13,7 +13,8 @@ class SlabsController extends Controller
         return Slab::all();
     }
 
-    public function store(SlabsRequest $request): void{
+    public function store(SlabsRequest $request): void
+    {
         $data = $request->all();
 
         // Calculate square meters
@@ -21,7 +22,6 @@ class SlabsController extends Controller
 
         // Save the record
         Slab::create($data);
-
     }
 
     public function show(Slab $slabs): Slab

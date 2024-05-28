@@ -19,10 +19,10 @@ class ActivityLog extends Model
         'properties',
     ];
 
-   /* public function getOldPropertiesAttribute()
-    {
-        return $this->properties['old'] ?? [];
-    }*/
+    /* public function getOldPropertiesAttribute()
+     {
+         return $this->properties['old'] ?? [];
+     }*/
     /*public function getOldPropertiesAttribute()
     {
         return $this->properties['old'] ?? [];

@@ -8,7 +8,7 @@ class AddSoftDeletesToUsersTable extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table){
             if (!Schema::hasColumn('users', 'deleted_at')) {
                 $table->softDeletesDatetime('deleted_at')->nullable();
             }
